@@ -1,15 +1,20 @@
 package com.sahaj.cleanstrike;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Player {
 
     private String name;
     private int score;
     private int foulCount;
+    private List<ActionType> actionTypeList;
 
     Player(String name, int score) {
         this.name = name;
         this.score = score;
         this.foulCount = 0;
+        this.actionTypeList = new ArrayList<>();
     }
 
     public String getName() {
@@ -35,27 +40,57 @@ public class Player {
     }
 
     public void handleFoul() {
+        addFoul();
         int currentFoulCount = this.getFoulCount();
-        if(currentFoulCount == 2){
-            resetFoulCount();
+
+        if (currentFoulCount == 3) {
             decrementScore(1);
-        }else if( currentFoulCount < 3){
-            addFoul();
+            resetFoulCount();
         }
+        System.out.println(this.foulCount);
     }
 
-    public void resetFoulCount(){
+    public void resetFoulCount() {
         this.foulCount = 0;
     }
 
 
-    public void addFoul(){
-        this.foulCount = this.getFoulCount()+1;
+    public void addFoul() {
+        this.foulCount = this.getFoulCount() + 1;
     }
 
     public static Player initializePlayer(String name) {
         int defaultScore = 0;
         return new Player(name, defaultScore);
     }
+
+    public List<ActionType> getActionNatureList() {
+        return this.actionTypeList;
+    }
+
+    public void addCurrentActionResult(ActionType actionType) {
+        this.actionTypeList.add(actionType);
+    }
+
+    public void handleIfLastThreeActionsWereFoulty() {
+        boolean areLastThreeFaulty = true;
+        int totalActionsYet = this.actionTypeList.size();
+        System.out.println(this.actionTypeList);
+        if (totalActionsYet >= 3) {
+            for (ActionType actionType : this.actionTypeList.subList(totalActionsYet - 3, totalActionsYet)) {
+                if (actionType == ActionType.NON_FOUL) {
+                    areLastThreeFaulty = false;
+                    break;
+                }
+            }
+        } else {
+            areLastThreeFaulty = false;
+        }
+        System.out.println("areLastThreeFaulty: " + areLastThreeFaulty);
+        if (areLastThreeFaulty) {
+            this.decrementScore(1);
+        }
+    }
+
 
 }
