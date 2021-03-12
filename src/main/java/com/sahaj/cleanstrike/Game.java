@@ -1,5 +1,6 @@
 package com.sahaj.cleanstrike;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class Game {
@@ -14,22 +15,35 @@ public class Game {
         while (!board.isGameFinished()) {
             int choice = scan.nextInt();
             GameAction action = getGameAction(choice);
-
-
-            if (action.canExecute(board, player1)) {
-                action.execute(board, player1);
-                System.out.println("black coins : " + board.getBlackCoinCount() + " red coins: " + board.getRedCoinCount());
-                System.out.println("Player " + player1.getName() + " score: " + player1.getScore());
-            } else{
-                System.out.println("Invalid strike");
-                System.out.println("black coins : " + board.getBlackCoinCount() + " red coins: " + board.getRedCoinCount());
-            }
-
-            if (board.getTotalCoinCount() == 0) {
-                System.out.println("game finished");
+            boolean canContinue = executeAction(board, player1, action);
+            if(!canContinue)
                 return;
-            }
         }
+    }
+
+    public static void executeGamePlay(Board board, Player player, List<GameAction> gameActionSequence) {
+        for (GameAction action : gameActionSequence) {
+            boolean canContinue = executeAction(board, player, action);
+            if(!canContinue)
+            return;
+        }
+    }
+
+    private static boolean executeAction(Board board, Player player, GameAction action) {
+        System.out.println("Executing " + action.getClass().getSimpleName() + " action");
+        if(board.isGameFinished()){
+            System.out.println("Game finished, stopping execution");
+            return false;
+        }
+        if (action.canExecute(board, player)) {
+            action.execute(board, player);
+            System.out.println("black coins : " + board.getBlackCoinCount() + " red coins: " + board.getRedCoinCount());
+            System.out.println("Player " + player.getName() + " score: " + player.getScore());
+        } else{
+            System.out.println("Invalid strike");
+            System.out.println("black coins : " + board.getBlackCoinCount() + " red coins: " + board.getRedCoinCount());
+        }
+        return true;
     }
 
     private static void printInputMessage() {
@@ -43,6 +57,8 @@ public class Game {
             return new MultiStrikeAction();
         } else if (input == 3) {
             return new RedStrikeAction();
+        } else if(input == 4){
+            return  new StrikerStrikeAction();
         }
         return null;
     }
