@@ -16,7 +16,7 @@ public class Game {
             int choice = scan.nextInt();
             GameAction action = getGameAction(choice);
             boolean canContinue = executeAction(board, player1, action);
-            if(!canContinue)
+            if (!canContinue)
                 return;
         }
     }
@@ -24,25 +24,27 @@ public class Game {
     public static void executeGamePlay(Board board, Player player, List<GameAction> gameActionSequence) {
         for (GameAction action : gameActionSequence) {
             boolean canContinue = executeAction(board, player, action);
-            if(!canContinue)
-            return;
+            if (!canContinue)
+                return;
         }
     }
 
     private static boolean executeAction(Board board, Player player, GameAction action) {
         System.out.println("Executing " + action.getClass().getSimpleName() + " action");
-        if(board.isGameFinished()){
+        if (board.isGameFinished()) {
             System.out.println("Game finished, stopping execution");
             return false;
         }
         if (action.canExecute(board, player)) {
             action.execute(board, player);
-            System.out.println("black coins : " + board.getBlackCoinCount() + " red coins: " + board.getRedCoinCount());
-            System.out.println("Player " + player.getName() + " score: " + player.getScore());
-        } else{
+            System.out.println("FoulCount: " + player.getFoulCount() + " black coins : " + board.getBlackCoinCount() + " red coins: " + board.getRedCoinCount());
+        } else {
             System.out.println("Invalid strike");
             System.out.println("black coins : " + board.getBlackCoinCount() + " red coins: " + board.getRedCoinCount());
         }
+        action.handleIfLastThreeWereFaulty(player);
+        System.out.println("Player " + player.getName() + " score: " + player.getScore());
+        System.out.println();
         return true;
     }
 
@@ -57,8 +59,8 @@ public class Game {
             return new MultiStrikeAction();
         } else if (input == 3) {
             return new RedStrikeAction();
-        } else if(input == 4){
-            return  new StrikerStrikeAction();
+        } else if (input == 4) {
+            return new StrikerStrikeAction();
         }
         return null;
     }
