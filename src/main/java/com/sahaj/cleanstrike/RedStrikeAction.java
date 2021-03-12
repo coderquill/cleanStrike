@@ -9,6 +9,7 @@ public class RedStrikeAction implements GameAction {
 
     @Override
     public Player executeOnPlayer(Player player) {
+        player.addCurrentActionResult(ActionType.NON_FOUL);
         player.incrementScore(3);
         return player;
     }
@@ -16,5 +17,10 @@ public class RedStrikeAction implements GameAction {
     @Override
     public boolean canExecute(Board board, Player player) {
         return board.getRedCoinCount() > 0;
+    }
+
+    @Override
+    public void handleIfLastThreeWereFaulty(Player player) {
+//        player.handleIfLastThreeActionsWereFoulty();
     }
 }

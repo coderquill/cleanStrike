@@ -34,7 +34,6 @@ public class DefunctCoinActionTest {
         assertEquals(player1.getScore(), -2);
         assertEquals(player1.getFoulCount(), 1);
 
-
     }
 
     @Test
@@ -49,8 +48,6 @@ public class DefunctCoinActionTest {
         assertEquals(board.getRedCoinCount(), 0);
         assertEquals(board.getBlackCoinCount(), 0);
         assertEquals(player.getFoulCount(), 1);
-
-
     }
 
     @Test
@@ -64,7 +61,6 @@ public class DefunctCoinActionTest {
 
         assertEquals(player.getScore(), -2);
         assertEquals(player.getFoulCount(), 1);
-
     }
 
     @Test
@@ -75,8 +71,14 @@ public class DefunctCoinActionTest {
 
         assertTrue(defunctCoin.canExecute(board, player));
         defunctCoin.execute(board, player);
+        defunctCoin.execute(board, player);
 
-        assertEquals(player.getFoulCount(), 1);
+        defunctCoin.execute(board, player);
+        defunctCoin.handleIfLastThreeWereFaulty(player);
+
+
+        assertEquals(player.getFoulCount(), 0);
+        assertEquals(player.getScore(), -7);
     }
 
 }

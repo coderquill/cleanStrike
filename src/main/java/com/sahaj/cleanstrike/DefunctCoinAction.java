@@ -13,14 +13,20 @@ public class DefunctCoinAction implements GameAction {
 
     @Override
     public Player executeOnPlayer(Player player) {
-        player.decrementScore(2);
+        player.addCurrentActionResult(ActionType.FOUL);
         player.handleFoul();
+        player.decrementScore(2);
         return player;
     }
 
     @Override
     public boolean canExecute(Board board, Player player) {
         return board.getTotalCoinCount() >= 1;
+    }
+
+    @Override
+    public void handleIfLastThreeWereFaulty(Player player) {
+        player.handleIfLastThreeActionsWereFoulty();
     }
 
 }

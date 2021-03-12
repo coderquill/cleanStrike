@@ -10,6 +10,7 @@ public class StrikeAction implements GameAction {
 
     @Override
     public Player executeOnPlayer(Player player) {
+        player.addCurrentActionResult(ActionType.NON_FOUL);
         player.incrementScore(1);
         return player;
     }
@@ -18,5 +19,11 @@ public class StrikeAction implements GameAction {
     public boolean canExecute(Board board, Player player) {
         return board.getBlackCoinCount() > 0;
     }
+
+    @Override
+    public void handleIfLastThreeWereFaulty(Player player) {
+        player.handleIfLastThreeActionsWereFoulty();
+    }
+
 }
 

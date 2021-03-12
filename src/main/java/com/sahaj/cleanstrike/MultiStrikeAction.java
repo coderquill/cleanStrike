@@ -9,6 +9,7 @@ public class MultiStrikeAction implements GameAction {
 
     @Override
     public Player executeOnPlayer(Player player) {
+        player.addCurrentActionResult(ActionType.NON_FOUL);
         player.incrementScore(2);
         return player;
     }
@@ -16,5 +17,10 @@ public class MultiStrikeAction implements GameAction {
     @Override
     public boolean canExecute(Board board, Player player) {
         return board.getBlackCoinCount() > 1;
+    }
+
+    @Override
+    public void handleIfLastThreeWereFaulty(Player player) {
+        player.handleIfLastThreeActionsWereFoulty();
     }
 }
