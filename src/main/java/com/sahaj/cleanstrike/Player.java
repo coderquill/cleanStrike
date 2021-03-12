@@ -10,12 +10,22 @@ public class Player {
         this.score = score;
     }
 
-    public String getPlayerName(){
+    public String getName(){
         return this.name;
     }
 
-    public int getPlayerScore(){
+    public int getScore(){
         return this.score;
+    }
+
+    public void incrementScore(int scoreToBeAdded){
+        int currentScore = this.getScore();
+        this.score = currentScore + scoreToBeAdded;
+    }
+
+    public void decrementScore(int scoreToBeSubtracted){
+        int currentScore = this.getScore();
+        this.score = currentScore - scoreToBeSubtracted;
     }
 
     public static Player initializePlayer(String name){
