@@ -10,6 +10,7 @@ public class StrikerStrikeAction implements GameAction {
     @Override
     public Player executeOnPlayer(Player player) {
         player.decrementScore(1);
+        player.handleFoul();
         return player;
     }
 

@@ -20,6 +20,7 @@ public class DefunctCoinActionTest {
         assertEquals(board.getBlackCoinCount(), 0);
         assertEquals(board.getRedCoinCount(), 0);
         assertEquals(player.getScore(), -2);
+        assertEquals(player.getFoulCount(), 1);
 
 
         Player player1 = Player.initializePlayer("testPlayer");
@@ -31,6 +32,8 @@ public class DefunctCoinActionTest {
         assertEquals(board1.getBlackCoinCount(), 0);
         assertEquals(board1.getRedCoinCount(), 1);
         assertEquals(player1.getScore(), -2);
+        assertEquals(player1.getFoulCount(), 1);
+
 
     }
 
@@ -45,6 +48,8 @@ public class DefunctCoinActionTest {
 
         assertEquals(board.getRedCoinCount(), 0);
         assertEquals(board.getBlackCoinCount(), 0);
+        assertEquals(player.getFoulCount(), 1);
+
 
     }
 
@@ -58,6 +63,20 @@ public class DefunctCoinActionTest {
         defunctCoin.execute(board, player);
 
         assertEquals(player.getScore(), -2);
+        assertEquals(player.getFoulCount(), 1);
+
+    }
+
+    @Test
+    public void testShouldAddFoulForDefunctAction() throws InvalidBoardException {
+        GameAction defunctCoin = new DefunctCoinAction();
+        Board board = Board.buildDefaultBoard();
+        Player player = Player.initializePlayer("testPalyer");
+
+        assertTrue(defunctCoin.canExecute(board, player));
+        defunctCoin.execute(board, player);
+
+        assertEquals(player.getFoulCount(), 1);
     }
 
 }

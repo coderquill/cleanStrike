@@ -14,6 +14,7 @@ public class DefunctCoinAction implements GameAction {
     @Override
     public Player executeOnPlayer(Player player) {
         player.decrementScore(2);
+        player.handleFoul();
         return player;
     }
 
