@@ -2,8 +2,7 @@ package com.sahaj.cleanstrike;
 
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.*;
 
 public class StrikeActionTest {
 
@@ -13,6 +12,7 @@ public class StrikeActionTest {
         Board board = Board.buildBoard(1, 9);
         Player player = Player.initializePlayer("testPlayer");
 
+        assertTrue(strike.canExecute(board, player));
         strike.execute(board, player);
 
         assertEquals(board.getBlackCoinCount(), 8);
