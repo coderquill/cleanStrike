@@ -2,12 +2,15 @@ package com.sahaj.cleanstrike;
 
 public interface GameAction {
 
-    public Board executeOnBoard(Board board);
-    public Player executeOnPlayer(Player player);
+    Board executeOnBoard(Board board);
 
-    public boolean canExecute(Board board, Player player);
+    Player executeOnPlayer(Player player);
 
-    default void execute(Board board, Player player){
+    boolean canExecute(Board board, Player player);
+
+    void handleIfLastThreeWereFaulty(Player player);
+
+    default void execute(Board board, Player player) {
         executeOnBoard(board);
         executeOnPlayer(player);
     }
