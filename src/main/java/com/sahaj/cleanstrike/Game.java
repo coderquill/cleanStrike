@@ -11,15 +11,18 @@ public class Game {
         Board board = Board.buildDefaultBoard();
         printInputMessage();
 
-        while(!board.isGameFinished()) {
+        while (!board.isGameFinished()) {
             int choice = scan.nextInt();
             GameAction action = getGameAction(choice);
 
 
             if (action.canExecute(board, player1)) {
                 action.execute(board, player1);
-                System.out.println(board.getBlackCoinCount() + "red" + board.getRedCoinCount());
-                System.out.println(player1.getScore() + "score");
+                System.out.println("black coins : " + board.getBlackCoinCount() + " red coins: " + board.getRedCoinCount());
+                System.out.println("Player " + player1.getName() + " score: " + player1.getScore());
+            } else{
+                System.out.println("Invalid strike");
+                System.out.println("black coins : " + board.getBlackCoinCount() + " red coins: " + board.getRedCoinCount());
             }
 
             if (board.getTotalCoinCount() == 0) {
@@ -36,8 +39,9 @@ public class Game {
     public static GameAction getGameAction(int input) {
         if (input == 1) {
             return new StrikeAction();
-        }
-        else if (input == 2) {
+        } else if (input == 2) {
+            return new MultiStrikeAction();
+        } else if (input == 3) {
             return new RedStrikeAction();
         }
         return null;
