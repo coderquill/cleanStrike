@@ -33,12 +33,14 @@ public class GameTest  {
                 new StrikeAction(),
                 new MultiStrikeAction(),
                 new RedStrikeAction(),
+                new DefunctCoinAction(),
                 new MultiStrikeAction(),
-                new StrikeAction());
+                new StrikeAction(),
+                new DefunctCoinAction());
 
         Player player = Player.initializePlayer("Player1");
         Game.executeGamePlay(Board.buildDefaultBoard(), player,
                 gameActionSequence);
-        Assert.assertEquals(player.getScore(), 8);
+        Assert.assertEquals(player.getScore(), 4);
     }
 }
