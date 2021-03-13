@@ -7,7 +7,7 @@ import static org.junit.Assert.*;
 public class StrikeActionTest {
 
     @Test
-    public void testShouldIncrementScoreByOneAndDecrementBlackCoinCountByOneForStrike() throws InvalidBoardException {
+    public void testShouldIncrementScoreByOneForStrike() throws InvalidBoardException {
         GameAction strike = new StrikeAction();
         Board board = Board.buildBoard(1, 9);
         Player player = Player.initializePlayer("testPlayer");
@@ -15,36 +15,31 @@ public class StrikeActionTest {
         assertTrue(strike.canExecute(board, player));
         strike.execute(board, player);
 
-        assertEquals(board.getBlackCoinCount(), 8);
-        assertEquals(board.getRedCoinCount(), 1);
         assertEquals(player.getScore(), 1);
     }
 
     @Test
-    public void testShouldNotChangeBlackCoinCountWhenNoBlackCoinsAreAvailable() throws InvalidBoardException {
+    public void testShouldDecrementBlackCoinCountByOneForStrike() throws InvalidBoardException {
+        GameAction strike = new StrikeAction();
+        Board board = Board.buildBoard(1, 8);
+        Player player = Player.initializePlayer("testPlayer");
+
+        assertTrue(strike.canExecute(board, player));
+        strike.execute(board, player);
+
+        assertEquals(board.getBlackCoinCount(), 7);
+    }
+
+
+    @Test
+    public void testShouldNotExecuteStrikeForNoBlackCoinsAvailable() throws InvalidBoardException {
         GameAction strike = new StrikeAction();
         Board board = Board.buildBoard(0, 0);
         Player player = Player.initializePlayer("testPlayer");
 
         assertFalse(strike.canExecute(board, player));
-
-        assertEquals(board.getBlackCoinCount(), 0);
-        assertEquals(board.getRedCoinCount(), 0);
-        assertEquals(player.getScore(), 0);
     }
 
-    @Test
-    public void testShouldNotChangeCoinCountAndScoreWhenOnlyARedCoinIsAvailable() throws InvalidBoardException {
-        GameAction strike = new StrikeAction();
-        Board board = Board.buildBoard(1, 0);
-        Player player = Player.initializePlayer("testPlayer");
-
-        assertFalse(strike.canExecute(board, player));
-
-        assertEquals(board.getBlackCoinCount(), 0);
-        assertEquals(board.getRedCoinCount(), 1);
-        assertEquals(player.getScore(), 0);
-    }
 
     @Test(expected = InvalidBoardException.class)
     public void testShouldNotChangeCoinCountAndScoreWhenNoCoinIsAvailable() throws InvalidBoardException {
