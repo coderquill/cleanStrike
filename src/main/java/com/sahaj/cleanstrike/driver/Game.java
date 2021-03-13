@@ -1,4 +1,10 @@
-package com.sahaj.cleanstrike;
+package com.sahaj.cleanstrike.driver;
+
+import com.sahaj.cleanstrike.entities.Board;
+import com.sahaj.cleanstrike.entities.Player;
+import com.sahaj.cleanstrike.exceptions.InvalidBoardException;
+import com.sahaj.cleanstrike.gameactions.GameAction;
+import com.sahaj.cleanstrike.gameactions.implementations.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,16 +37,13 @@ public class Game {
     public static void main(String[] args) throws InvalidBoardException {
         Scanner scan = new Scanner(System.in);
 
-        System.out.println("How many players are playing?");
-        int totalPlayers = scan.nextInt();
-
+        int totalPlayers = 2;
         List<Player> playerList = new ArrayList<>();
         for (int i = 1; i < totalPlayers + 1; i++) {
             System.out.println("Please provide name of player" + i + "-");
             String playerName = scan.next();
             playerList.add(Player.initializePlayer(playerName));
         }
-
 
         Board board = Board.buildDefaultBoard();
         Game game = new Game(playerList);

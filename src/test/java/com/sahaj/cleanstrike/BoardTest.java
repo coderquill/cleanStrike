@@ -1,5 +1,7 @@
 package com.sahaj.cleanstrike;
 
+import com.sahaj.cleanstrike.entities.Board;
+import com.sahaj.cleanstrike.exceptions.InvalidBoardException;
 import junit.framework.TestCase;
 import org.junit.Assert;
 import org.junit.Test;

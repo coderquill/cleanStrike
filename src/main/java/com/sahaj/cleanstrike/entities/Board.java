@@ -1,5 +1,7 @@
-package com.sahaj.cleanstrike;
+package com.sahaj.cleanstrike.entities;
 
+
+import com.sahaj.cleanstrike.exceptions.InvalidBoardException;
 
 public class Board {
     private int redCoinCount;

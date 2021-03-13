@@ -1,4 +1,6 @@
-package com.sahaj.cleanstrike;
+package com.sahaj.cleanstrike.entities;
+
+import com.sahaj.cleanstrike.enums.ActionType;
 
 import java.util.ArrayList;
 import java.util.List;

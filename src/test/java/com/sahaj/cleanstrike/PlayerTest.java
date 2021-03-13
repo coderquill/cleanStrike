@@ -1,5 +1,7 @@
 package com.sahaj.cleanstrike;
 
+import com.sahaj.cleanstrike.entities.Player;
+import com.sahaj.cleanstrike.enums.ActionType;
 import junit.framework.TestCase;
 import org.junit.Test;
 

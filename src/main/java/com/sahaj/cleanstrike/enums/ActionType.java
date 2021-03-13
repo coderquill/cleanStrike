@@ -1,4 +1,4 @@
-package com.sahaj.cleanstrike;
+package com.sahaj.cleanstrike.enums;
 
 public enum ActionType {
     FOUL_ACTION,

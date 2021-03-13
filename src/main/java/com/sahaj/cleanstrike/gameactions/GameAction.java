@@ -1,4 +1,7 @@
-package com.sahaj.cleanstrike;
+package com.sahaj.cleanstrike.gameactions;
+
+import com.sahaj.cleanstrike.entities.Board;
+import com.sahaj.cleanstrike.entities.Player;
 
 public interface GameAction {
 

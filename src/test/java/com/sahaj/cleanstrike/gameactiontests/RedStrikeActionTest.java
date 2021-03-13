@@ -1,5 +1,10 @@
-package com.sahaj.cleanstrike;
+package com.sahaj.cleanstrike.gameactiontests;
 
+import com.sahaj.cleanstrike.entities.Board;
+import com.sahaj.cleanstrike.entities.Player;
+import com.sahaj.cleanstrike.exceptions.InvalidBoardException;
+import com.sahaj.cleanstrike.gameactions.GameAction;
+import com.sahaj.cleanstrike.gameactions.implementations.RedStrikeAction;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
