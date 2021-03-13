@@ -1,4 +1,9 @@
-package com.sahaj.cleanstrike;
+package com.sahaj.cleanstrike.GameAction.Implementations;
+
+import com.sahaj.cleanstrike.ActionType;
+import com.sahaj.cleanstrike.Board;
+import com.sahaj.cleanstrike.GameAction.GameAction;
+import com.sahaj.cleanstrike.Player;
 
 public class DefunctCoinAction implements GameAction {
     @Override

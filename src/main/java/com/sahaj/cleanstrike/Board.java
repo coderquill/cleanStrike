@@ -49,7 +49,7 @@ public class Board {
         return buildBoard(defaultRedCoinCount, defaultBlackCoinCount);
     }
 
-    public boolean isGameFinished(){
+    public boolean coinsExhausted() {
         return this.getTotalCoinCount() == 0;
     }
 

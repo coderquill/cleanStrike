@@ -1,6 +1,6 @@
 package com.sahaj.cleanstrike;
 
-public class EndAction implements GameAction{
+public class EndAction implements GameAction {
 
     @Override
     public Board executeOnBoard(Board board) {

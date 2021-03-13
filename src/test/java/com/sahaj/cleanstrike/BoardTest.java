@@ -48,7 +48,7 @@ public class BoardTest extends TestCase {
     }
 
     @Test
-    public void testShouldRemoveRequiredNumberOfBlackCoinFromBoard() throws InvalidBoardException {
+    public void testShouldRemoveGivenNumberOfBlackCoinFromBoard() throws InvalidBoardException {
         Board board = Board.buildDefaultBoard();
         int numberOfBlackCoinsToBeRemovedFromBoard = 1;
         int initialBlackCoinCount = board.getBlackCoinCount();
@@ -61,22 +61,22 @@ public class BoardTest extends TestCase {
     }
 
     @Test
-    public void testGameShouldFinishWhenCoinsAreExhausted() throws InvalidBoardException {
+    public void testShouldFinishWhenCoinsAreExhausted() throws InvalidBoardException {
         Board board = Board.buildBoard(0, 0);
 
-        assertTrue(board.isGameFinished());
+        assertTrue(board.coinsExhausted());
     }
 
     @Test
-    public void testGameShouldNotFinishWhenCoinsArePresent() throws InvalidBoardException {
+    public void testShouldNotFinishWhenCoinsArePresent() throws InvalidBoardException {
         Board board = Board.buildBoard(1, 0);
-        assertFalse(board.isGameFinished());
+        assertFalse(board.coinsExhausted());
 
         Board board1 = Board.buildBoard(0, 1);
-        assertFalse(board1.isGameFinished());
+        assertFalse(board1.coinsExhausted());
 
         Board board2 = Board.buildBoard(1, 2);
-        assertFalse(board2.isGameFinished());
+        assertFalse(board2.coinsExhausted());
     }
 
 }
