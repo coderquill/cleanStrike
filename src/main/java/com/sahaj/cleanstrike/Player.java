@@ -6,6 +6,7 @@ import java.util.List;
 public class Player {
 
     private String name;
+
     private int score;
     private int foulCount;
     private List<ActionType> actionTypeList;
@@ -48,7 +49,6 @@ public class Player {
             decrementScore(1);
             resetFoulCount();
         }
-        System.out.println(this.foulCount);
     }
 
     public void resetFoulCount() {
@@ -76,7 +76,6 @@ public class Player {
     public void handleIfLastThreeActionsWereFoulty() {
         boolean areLastThreeFaulty = true;
         int totalActionsYet = this.actionTypeList.size();
-        System.out.println(this.actionTypeList);
         if (totalActionsYet >= 3) {
             for (ActionType actionType : this.actionTypeList.subList(totalActionsYet - 3, totalActionsYet)) {
                 if (actionType == ActionType.NON_FOUL_ACTION) {
@@ -87,7 +86,6 @@ public class Player {
         } else {
             areLastThreeFaulty = false;
         }
-        System.out.println("areLastThreeFaulty: " + areLastThreeFaulty);
         if (areLastThreeFaulty) {
             this.decrementScore(1);
         }

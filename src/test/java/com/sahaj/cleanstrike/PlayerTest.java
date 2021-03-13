@@ -7,12 +7,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import static java.util.Arrays.asList;
-import static junit.framework.Assert.assertEquals;
 
 public class PlayerTest extends TestCase {
     @Test
     public void testShouldCreatePlayerWithProvidedNameAndDefaultScore() {
         Player player1 = Player.initializePlayer("player1");
+
         int playerScore = player1.getScore();
         String playerName = player1.getName();
 
@@ -39,14 +39,12 @@ public class PlayerTest extends TestCase {
     @Test
     public void testShouldIncrementPlayerScoreByProvidedAmount() {
         Player player1 = Player.initializePlayer("player1");
-        int initialPlayerScore = player1.getScore();
-        int incrementScoreByONe = 1;
-        int incrementScoreByTwo = 2;
 
-        player1.incrementScore(incrementScoreByONe);
-        player1.incrementScore(incrementScoreByTwo);
 
-        assertEquals(player1.getScore(), initialPlayerScore + incrementScoreByONe + incrementScoreByTwo);
+        player1.incrementScore(1);
+        player1.incrementScore(2);
+
+        assertEquals(player1.getScore(), 3);
     }
 
     @Test
@@ -68,34 +66,25 @@ public class PlayerTest extends TestCase {
     }
 
     @Test
-    public void testShouldResetFoulCountAndDecrementScore() {
+    public void testShouldResetFoulCountForThirdFoul() {
         Player player = Player.initializePlayer("testPlayer");
 
         player.handleFoul();
-        assertEquals(player.getFoulCount(), 1);
-        assertEquals(player.getScore(), 0);
-
         player.handleFoul();
-        assertEquals(player.getFoulCount(), 2);
-        assertEquals(player.getScore(), 0);
-
         player.handleFoul();
+
         assertEquals(player.getFoulCount(), 0);
-        assertEquals(player.getScore(), -1);
+    }
+
+    @Test
+    public void testShouldDecrementScoreByOneForThirdFoul() {
+        Player player = Player.initializePlayer("testPlayer");
 
         player.handleFoul();
-        assertEquals(player.getFoulCount(), 1);
-        assertEquals(player.getScore(), -1);
-
         player.handleFoul();
-        assertEquals(player.getFoulCount(), 2);
-        assertEquals(player.getScore(), -1);
-
         player.handleFoul();
-        assertEquals(player.getFoulCount(), 0);
-        assertEquals(player.getScore(), -2);
 
-
+        assertEquals(player.getScore(), -1);
     }
 
     @Test
@@ -103,9 +92,9 @@ public class PlayerTest extends TestCase {
         Player player = Player.initializePlayer("testPlayer");
 
         player.handleFoul();
+        player.handleFoul();
 
-        assertEquals(player.getFoulCount(), 1);
-        assertEquals(player.getScore(), 0);
+        assertEquals(player.getFoulCount(), 2);
     }
 
     @Test
@@ -120,27 +109,20 @@ public class PlayerTest extends TestCase {
         Player player = Player.initializePlayer("testPlayer");
 
         player.addCurrentActionResult(ActionType.NON_FOUL_ACTION);
+        player.addCurrentActionResult(ActionType.FOUL_ACTION);
 
-        assertEquals(player.getActionNatureList(), new ArrayList<>(asList(ActionType.NON_FOUL_ACTION)));
 
-        Player player2 = Player.initializePlayer("testPlayer");
-
-        player2.addCurrentActionResult(ActionType.FOUL_ACTION);
-
-        player2.addCurrentActionResult(ActionType.FOUL_ACTION);
-
-        assertEquals(player2.getActionNatureList(), new ArrayList<>(asList(ActionType.FOUL_ACTION, ActionType.FOUL_ACTION)));
+        assertEquals(player.getActionNatureList(), new ArrayList<>(asList(ActionType.NON_FOUL_ACTION, ActionType.FOUL_ACTION)));
     }
 
     @Test
     public void testShouldDecrementScoreIfLastThreeActionsWereFaulty() {
         Player player = Player.initializePlayer("testPlayer");
-
         player.getActionNatureList().addAll(Arrays.asList(ActionType.FOUL_ACTION,
                 ActionType.NON_FOUL_ACTION, ActionType.FOUL_ACTION, ActionType.FOUL_ACTION, ActionType.FOUL_ACTION));
 
-
         player.handleIfLastThreeActionsWereFoulty();
+
         assertEquals(player.getScore(), -1);
     }
 
@@ -153,15 +135,5 @@ public class PlayerTest extends TestCase {
 
         player.handleIfLastThreeActionsWereFoulty();
         assertEquals(player.getScore(), 0);
-
-        Player player1 = Player.initializePlayer("testPlayer1");
-
-        player1.getActionNatureList().addAll(Arrays.asList(ActionType.FOUL_ACTION,
-                ActionType.NON_FOUL_ACTION, ActionType.FOUL_ACTION, ActionType.FOUL_ACTION, ActionType.NON_FOUL_ACTION));
-
-        player1.handleIfLastThreeActionsWereFoulty();
-        assertEquals(player1.getScore(), 0);
     }
-
-
 }
