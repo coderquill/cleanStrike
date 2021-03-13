@@ -119,25 +119,25 @@ public class PlayerTest extends TestCase {
     public void testShouldAddCurrentActionResult() {
         Player player = Player.initializePlayer("testPlayer");
 
-        player.addCurrentActionResult(ActionType.NON_FOUL);
+        player.addCurrentActionResult(ActionType.NON_FOUL_ACTION);
 
-        assertEquals(player.getActionNatureList(), new ArrayList<>(asList(ActionType.NON_FOUL)));
+        assertEquals(player.getActionNatureList(), new ArrayList<>(asList(ActionType.NON_FOUL_ACTION)));
 
         Player player2 = Player.initializePlayer("testPlayer");
 
-        player2.addCurrentActionResult(ActionType.FOUL);
+        player2.addCurrentActionResult(ActionType.FOUL_ACTION);
 
-        player2.addCurrentActionResult(ActionType.FOUL);
+        player2.addCurrentActionResult(ActionType.FOUL_ACTION);
 
-        assertEquals(player2.getActionNatureList(), new ArrayList<>(asList(ActionType.FOUL, ActionType.FOUL)));
+        assertEquals(player2.getActionNatureList(), new ArrayList<>(asList(ActionType.FOUL_ACTION, ActionType.FOUL_ACTION)));
     }
 
     @Test
     public void testShouldDecrementScoreIfLastThreeActionsWereFaulty() {
         Player player = Player.initializePlayer("testPlayer");
 
-        player.getActionNatureList().addAll(Arrays.asList(ActionType.FOUL,
-                ActionType.NON_FOUL, ActionType.FOUL, ActionType.FOUL, ActionType.FOUL));
+        player.getActionNatureList().addAll(Arrays.asList(ActionType.FOUL_ACTION,
+                ActionType.NON_FOUL_ACTION, ActionType.FOUL_ACTION, ActionType.FOUL_ACTION, ActionType.FOUL_ACTION));
 
 
         player.handleIfLastThreeActionsWereFoulty();
@@ -148,16 +148,16 @@ public class PlayerTest extends TestCase {
     public void testShouldNotChangeScoreIfLastThreeActionsWereNotFaulty() {
         Player player = Player.initializePlayer("testPlayer");
 
-        player.getActionNatureList().addAll(Arrays.asList(ActionType.FOUL,
-                ActionType.NON_FOUL, ActionType.NON_FOUL, ActionType.FOUL, ActionType.FOUL));
+        player.getActionNatureList().addAll(Arrays.asList(ActionType.FOUL_ACTION,
+                ActionType.NON_FOUL_ACTION, ActionType.NON_FOUL_ACTION, ActionType.FOUL_ACTION, ActionType.FOUL_ACTION));
 
         player.handleIfLastThreeActionsWereFoulty();
         assertEquals(player.getScore(), 0);
 
         Player player1 = Player.initializePlayer("testPlayer1");
 
-        player1.getActionNatureList().addAll(Arrays.asList(ActionType.FOUL,
-                ActionType.NON_FOUL, ActionType.FOUL, ActionType.FOUL, ActionType.NON_FOUL));
+        player1.getActionNatureList().addAll(Arrays.asList(ActionType.FOUL_ACTION,
+                ActionType.NON_FOUL_ACTION, ActionType.FOUL_ACTION, ActionType.FOUL_ACTION, ActionType.NON_FOUL_ACTION));
 
         player1.handleIfLastThreeActionsWereFoulty();
         assertEquals(player1.getScore(), 0);

@@ -1,6 +1,6 @@
 package com.sahaj.cleanstrike;
 
-public class StrikerStrikeAction implements GameAction {
+public class EndAction implements GameAction{
 
     @Override
     public Board executeOnBoard(Board board) {
@@ -9,21 +9,16 @@ public class StrikerStrikeAction implements GameAction {
 
     @Override
     public Player executeOnPlayer(Player player) {
-        player.addCurrentActionResult(ActionType.FOUL_ACTION);
-        player.handleFoul();
-        player.decrementScore(1);
         return player;
     }
 
     @Override
     public boolean canExecute(Board board, Player player) {
-        return true;
+        return false;
     }
 
     @Override
     public void handleIfLastThreeWereFaulty(Player player) {
-        player.handleIfLastThreeActionsWereFoulty();
+
     }
-
-
 }

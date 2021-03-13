@@ -64,7 +64,7 @@ public class DefunctCoinActionTest {
     }
 
     @Test
-    public void testShouldAddFoulForDefunctAction() throws InvalidBoardException {
+    public void testShouldResetFoulSuccesiveThreeDefunctAction() throws InvalidBoardException {
         GameAction defunctCoin = new DefunctCoinAction();
         Board board = Board.buildDefaultBoard();
         Player player = Player.initializePlayer("testPalyer");
@@ -78,7 +78,7 @@ public class DefunctCoinActionTest {
 
 
         assertEquals(player.getFoulCount(), 0);
-        assertEquals(player.getScore(), -7);
+        assertEquals(player.getScore(), -8);
     }
 
 }

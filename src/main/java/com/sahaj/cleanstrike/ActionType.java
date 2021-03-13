@@ -1,6 +1,7 @@
 package com.sahaj.cleanstrike;
 
 public enum ActionType {
-    FOUL,
-    NON_FOUL
+    FOUL_ACTION,
+    NON_FOUL_ACTION,
+    END_ACTION
 }

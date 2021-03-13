@@ -9,7 +9,7 @@ public class MultiStrikeAction implements GameAction {
 
     @Override
     public Player executeOnPlayer(Player player) {
-        player.addCurrentActionResult(ActionType.NON_FOUL);
+        player.addCurrentActionResult(ActionType.NON_FOUL_ACTION);
         player.incrementScore(2);
         return player;
     }

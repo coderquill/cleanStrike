@@ -10,7 +10,7 @@ public class StrikeAction implements GameAction {
 
     @Override
     public Player executeOnPlayer(Player player) {
-        player.addCurrentActionResult(ActionType.NON_FOUL);
+        player.addCurrentActionResult(ActionType.NON_FOUL_ACTION);
         player.incrementScore(1);
         return player;
     }

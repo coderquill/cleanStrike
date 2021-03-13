@@ -28,6 +28,7 @@ public class Player {
     public void incrementScore(int scoreToBeAdded) {
         int currentScore = this.getScore();
         this.score = currentScore + scoreToBeAdded;
+
     }
 
     public void decrementScore(int scoreToBeSubtracted) {
@@ -78,7 +79,7 @@ public class Player {
         System.out.println(this.actionTypeList);
         if (totalActionsYet >= 3) {
             for (ActionType actionType : this.actionTypeList.subList(totalActionsYet - 3, totalActionsYet)) {
-                if (actionType == ActionType.NON_FOUL) {
+                if (actionType == ActionType.NON_FOUL_ACTION) {
                     areLastThreeFaulty = false;
                     break;
                 }
