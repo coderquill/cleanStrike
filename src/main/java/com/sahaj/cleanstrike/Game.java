@@ -1,175 +1,202 @@
 package com.sahaj.cleanstrike;
 
-import javax.swing.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class Game {
 
-    static boolean winnerFound = false;
-    static Player winner;
-    static boolean resultDeclared = false;
+    private boolean winnerFound;
+
+    public Player getWinner() {
+        return winner;
+    }
+
+    private Player winner;
+    private boolean resultDeclared;
+    private List<Player> playerList;
+    private List<GameAction> actionRecord = new ArrayList<>();
+
+    public Game(List<Player> playerList) {
+        this.playerList = playerList;
+    }
+
+    public Game(List<Player> playerList, List<GameAction> gameAction) {
+        this.playerList = playerList;
+        this.actionRecord = gameAction;
+
+    }
+
 
     public static void main(String[] args) throws InvalidBoardException {
         Scanner scan = new Scanner(System.in);
-        Player player1 = Player.initializePlayer("player1");
-        Player player2 = Player.initializePlayer("player2");
+
+        System.out.println("How many players are playing?");
+        int totalPlayers = scan.nextInt();
+
+        List<Player> playerList = new ArrayList<>();
+        for (int i = 1; i < totalPlayers + 1; i++) {
+            System.out.println("Please provide name of player" + i + "-");
+            String playerName = scan.next();
+            playerList.add(Player.initializePlayer(playerName));
+        }
+
 
         Board board = Board.buildDefaultBoard();
-        printInputMessage();
+        Game game = new Game(playerList);
 
-        while (!board.isGameFinished()) {
+        int count = 0;
+        while (!(game.resultDeclared)) {
+            printInputMessage();
             int choice = scan.nextInt();
             GameAction action = getGameAction(choice);
-            boolean canContinue = executeAction(board, player1, action);
-            if (!canContinue)
-                return;
+            game.executeAction(board, game.playerList.get(count % totalPlayers), action);
+            game.checkIfAnyPlayerWon();
+            count++;
         }
     }
 
-    public static void playGameWithOnePlayer(Board board, Player player, List<GameAction> gameActionSequence) {
-        for (GameAction action : gameActionSequence) {
-            boolean canContinue = executeAction(board, player, action);
-            if (!canContinue)
-                return;
-        }
-    }
-
-    public static void executeGameAction(Board board, Player player, GameAction gameAction) {
+    private void executeGameAction(Board board, Player player, GameAction gameAction) {
         executeAction(board, player, gameAction);
     }
 
-    private static boolean executeAction(Board board, Player player, GameAction action) {
+    private void executeAction(Board board, Player player, GameAction action) {
 
-        if (action.getClass().equals(EndAction.class)) {
+        if (this.resultDeclared || board.coinsExhausted()) {
+            this.getMatchResult();
+        } else if (action.getClass().equals(EndAction.class)) {
             System.out.println("Actions for player " + player.getName() + " have finished.");
-//            if(!winnerFound){ //winnerFound wont ever come here
-//                printDrawResult();
-//            }
-            getMatchResult();
-            return winnerFound;
-        }
-
-        if(board.isGameFinished()){
-//            printDrawResult();
-            getMatchResult();
-            return true;
-        }
-
-        if (!resultDeclared && action.canExecute(board, player)) {
+            this.getMatchResult();
+        } else if (!action.canExecute(board, player)) {
+            printInvalidStrikeResult(board, player, action);
+        } else {
             System.out.println("Executed " + action.getClass().getSimpleName() + " action");
             action.execute(board, player);
             action.handleIfLastThreeWereFaulty(player);
-            printActionResult(board, player, action);
-        } else {
-            printInvalidStrikeResult(board, player, action);
-            return false;
+            printActionResult(board, player);
         }
-        return true;
     }
 
-    private static void printInvalidStrikeResult(Board board, Player player, GameAction action) {
-        System.out.println("Invalid strike: " + action.getClass().getSimpleName() + " by Player " + player.getName() );
-        System.out.println("score: " + player.getScore() + " FoulCount: " + player.getFoulCount() );
+    private void printInvalidStrikeResult(Board board, Player player, GameAction action) {
+        System.out.println("Invalid strike: " + action.getClass().getSimpleName() + " by Player " + player.getName());
+        System.out.println("score: " + player.getScore() + " FoulCount: " + player.getFoulCount());
         System.out.println("Board now has:: black coins : " + board.getBlackCoinCount() + " red coins: " + board.getRedCoinCount());
         System.out.println();
     }
 
-    private static void printDrawResult() {
+    private void printDrawResult() {
         System.out.println("Game finished, stopping execution");
         System.out.println("Match is draw");
-        resultDeclared = true;
     }
 
-    private static void printActionResult(Board board, Player player, GameAction action) {
-        System.out.println("Player " + player.getName() + " score: " + player.getScore() + " FoulCount: " + player.getFoulCount() );
-        System.out.println("Board now has:: black coins : " + board.getBlackCoinCount() + " red coins: " + board.getRedCoinCount());
+    private void printActionResult(Board board, Player player) {
         System.out.println();
+        System.out.println("Player Name \t" + "score \t" + "Fouls ");
+        System.out.println(player.getName() + "   \t"
+                + player.getScore() + "   \t"
+                + player.getFoulCount() + "    \t");
+        System.out.println();
+        System.out.println("Coins \t\t\t" + "Black \t" + "Red ");
+        System.out.println("\t\t\t\t"
+                + board.getBlackCoinCount() + "\t\t"
+                + board.getRedCoinCount());
+        System.out.println("---------------------------------------");
     }
 
-    private static void getMatchResult() {
-//        if (winnerFound || board.isGameFinished()) {
-//            System.out.println("Game finished, stopping execution");
-//            if (winnerFound) {
-//                System.out.println("winner is: " + winner.getName());
-//            } else {
-//                System.out.println("Match is draw");
-//            }
-//            return true;
-//        }
-//        return false;
-
-
-        if (winnerFound) {
-            printWinner();
+    private void getMatchResult() {
+        if (this.winnerFound) {
+            this.printWinner();
         } else {
-            printDrawResult();
+            this.printDrawResult();
+        }
+        this.resultDeclared = true;
+        printScoreOfAllPlayers();
+    }
+
+    private void printScoreOfAllPlayers() {
+        System.out.println();
+        System.out.println("Player Name \t" +
+                "score \t" + "Fouls ");
+
+        for (Player player : this.playerList) {
+            System.out.println(player.getName() + "   \t"
+                    + player.getScore() + "   \t"
+                    + player.getFoulCount() + "    \t");
         }
     }
 
-    private static void printWinner() {
+    private void printWinner() {
         System.out.println("Game finished, stopping execution");
         System.out.println("winner is: " + winner.getName());
-        resultDeclared = true;
+
     }
 
-    public static void checkIfAnyPlayerWon(Player player1, Player player2) {
-        checkScoreForWinner(player1, player2);
+    public void checkIfAnyPlayerWon() {
+        if (!(this.playerList.size() < 2)) {
+            checkScoreForWinner(this.playerList.get(0), this.playerList.get(1));
+        }
     }
 
-    static void checkScoreForWinner(Player player1, Player player2) {
+    void checkScoreForWinner(Player player1, Player player2) {
         if (player1.getScore() >= 5) {
             int scoreDifference = player1.getScore() - player2.getScore();
             if (scoreDifference >= 3) {
-                winnerFound = true;
-                winner = player1;
+                this.winnerFound = true;
+                this.winner = player1;
             }
         } else if (player2.getScore() >= 5) {
             int scoreDifference = player2.getScore() - player1.getScore();
             if (scoreDifference >= 3) {
-                winnerFound = true;
-                winner = player2;
+                this.winnerFound = true;
+                this.winner = player2;
             }
         }
-        if (winnerFound) {
-            printWinner();
+        if (this.winnerFound) {
+            getMatchResult();
+            this.resultDeclared = true;
         }
     }
 
-    private static void printInputMessage() {
-        System.out.println("give choice...");
+    public static void printInputMessage() {
+
+        System.out.println("Choose one action");
+        System.out.println("1. Strike");
+        System.out.println("2. MulitiStrike");
+        System.out.println("3. Red Strike");
+        System.out.println("4. Striker Strike");
+        System.out.println("5. Defunct strike");
+        System.out.println("6. None");
     }
 
+
     public static GameAction getGameAction(int input) {
-        if (input == 1) {
-            return new StrikeAction();
-        } else if (input == 2) {
-            return new MultiStrikeAction();
-        } else if (input == 3) {
-            return new RedStrikeAction();
-        } else if (input == 4) {
-            return new StrikerStrikeAction();
+        switch (input) {
+            case 1:
+                return new StrikeAction();
+            case 2:
+                return new MultiStrikeAction();
+            case 3:
+                return new RedStrikeAction();
+            case 4:
+                return new StrikerStrikeAction();
+            case 5:
+                return new DefunctCoinAction();
+            case 6:
+                return new EndAction();
         }
         return null;
     }
 
-    public static void playGameWithTwoPlayers(Board board, Player player1, Player player2,
-                                              List<GameAction> gameActionSequenceForPlayerOne,
-                                              List<GameAction> gameActionSequenceForPlayerTwo){
+    public void playGameWithTwoPlayers(Board board) {
 
-        int totalTurnsOfEachPlayer = Math.min(gameActionSequenceForPlayerOne.size(), gameActionSequenceForPlayerTwo.size());
-        for (int i = 0; i < totalTurnsOfEachPlayer; i++) {
-            Game.executeGameAction(board, player1,
-                    gameActionSequenceForPlayerOne.get(i));
-            Game.checkIfAnyPlayerWon(player1, player2);
-            if(Game.resultDeclared || board.isGameFinished())
-                break;
+        for (int i = 0; !(this.resultDeclared) && i < this.actionRecord.size(); i++) {
 
-            Game.executeGameAction(board, player2,
-                    gameActionSequenceForPlayerTwo.get(i));
-            Game.checkIfAnyPlayerWon(player1, player2);
-            if(Game.resultDeclared || board.isGameFinished())
-                break;
+            if (i % 2 == 0) {
+                executeGameAction(board, this.playerList.get(0), this.actionRecord.get(i));
+            } else {
+                executeGameAction(board, this.playerList.get(1), this.actionRecord.get(i));
+            }
+            checkIfAnyPlayerWon();
         }
     }
 }
