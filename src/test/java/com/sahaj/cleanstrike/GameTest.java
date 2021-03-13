@@ -2,8 +2,7 @@ package com.sahaj.cleanstrike;
 
 import org.junit.Test;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -11,207 +10,108 @@ import static org.junit.Assert.assertNull;
 public class GameTest {
 
     @Test
-    public void testGameExecutionWhenMultipleSingeStrikeActionsOccur() throws InvalidBoardException {
-        List<GameAction> gameActionSequence = Arrays.asList(
-                new StrikeAction(),
-                new StrikeAction(),
-                new StrikeAction(),
-                new StrikeAction(),
-                new StrikeAction(),
-                new StrikeAction()
-        );
-
-        Player player = Player.initializePlayer("Player1");
-        Board board = Board.buildDefaultBoard();
-        Game.playGameWithOnePlayer(board, player,
-                gameActionSequence);
-        assertEquals(player.getScore(), 6);
-        assertEquals(board.getBlackCoinCount(), 3);
-    }
-
-    @Test
-    public void testGameExecutionForGivenGameActionSequence() throws InvalidBoardException {
-        List<GameAction> gameActionSequence = Arrays.asList(
-                new StrikerStrikeAction(),
-                new StrikeAction(),
-                new MultiStrikeAction(),
-                new RedStrikeAction(),
-                new DefunctCoinAction(),
-                new MultiStrikeAction(),
-                new StrikeAction(),
-                new DefunctCoinAction());
-
-        Player player = Player.initializePlayer("Player1");
-        Game.playGameWithOnePlayer(Board.buildDefaultBoard(), player,
-                gameActionSequence);
-        assertEquals(player.getScore(), 3);
-    }
-
-    @Test
-    public void testGameExecutionForActionSequenceWithFoulActions() throws InvalidBoardException {
-        List<GameAction> gameActionSequence = Arrays.asList(
-                new StrikerStrikeAction(),
-                new StrikeAction(),
-                new MultiStrikeAction(),
-                new RedStrikeAction(),
-                new DefunctCoinAction(),
-                new DefunctCoinAction(),
-                new StrikeAction(),
-                new MultiStrikeAction(),
-                new StrikeAction(),
-                new StrikeAction(),
-                new DefunctCoinAction());
-
-        Player player = Player.initializePlayer("Player1");
-        Game.playGameWithOnePlayer(Board.buildDefaultBoard(), player,
-                gameActionSequence);
-        assertEquals(player.getScore(), 4);
-    }
-
-    @Test
-    public void testGameExecutionForOnlyFoulActions() throws InvalidBoardException {
-        List<GameAction> gameActionSequence = Arrays.asList(
-                new StrikerStrikeAction(),
-                new DefunctCoinAction(),
-                new DefunctCoinAction(),
-                new StrikerStrikeAction(),
-                new DefunctCoinAction());
-
-        Player player = Player.initializePlayer("Player1");
-        Game.playGameWithOnePlayer(Board.buildDefaultBoard(), player,
-                gameActionSequence);
-        assertEquals(player.getScore(), -12);
-    }
-
-    @Test
-    public void testGameExecutionForSuccessiveThreeFaultyActions() throws InvalidBoardException {
-        List<GameAction> gameActionSequence = Arrays.asList(
-                new StrikeAction(),
-                new MultiStrikeAction(),
-                new DefunctCoinAction(),
-                new StrikerStrikeAction(),
-                new DefunctCoinAction(),
-                new RedStrikeAction()
-        );
-
-        Player player = Player.initializePlayer("Player1");
-        Game.playGameWithOnePlayer(Board.buildDefaultBoard(), player,
-                gameActionSequence);
-        assertEquals(player.getScore(), -1);
-    }
-
-    @Test
-    public void testGameExecutionForOnlyDefunctCoinAction() throws InvalidBoardException {
-        List<GameAction> gameActionSequence = Arrays.asList(
-                new DefunctCoinAction(),
-                new DefunctCoinAction(),
-                new DefunctCoinAction(),
-                new DefunctCoinAction(),
-                new DefunctCoinAction(),
-                new DefunctCoinAction()
-        );
-
-        Player player = Player.initializePlayer("Player1");
-        Game.playGameWithOnePlayer(Board.buildDefaultBoard(), player,
-                gameActionSequence);
-        assertEquals(player.getScore(), -18);
-    }
-
-    @Test
     public void testShouldBeWonByPlayerOne() throws InvalidBoardException {
-        List<GameAction> gameActionSequenceForPlayerOne = Arrays.asList(
-                new StrikeAction(),
-                new MultiStrikeAction(),
-                new RedStrikeAction(),
-                new StrikerStrikeAction(),
-                new DefunctCoinAction(),
-                new EndAction()
-        );
-
-        List<GameAction> gameActionSequenceForPlayerTwo = Arrays.asList(
-                new StrikeAction(),
-                new MultiStrikeAction(),
-                new RedStrikeAction(),
-                new StrikerStrikeAction(),
-                new DefunctCoinAction(),
-                new EndAction()
-        );
-
         Board board = Board.buildDefaultBoard();
         Player player1 = Player.initializePlayer("testPlayer1");
         Player player2 = Player.initializePlayer("testPlayer2");
+        List<Player> playerList = Arrays.asList(player1, player2);
+        List<GameAction> actionList = Arrays.asList(
+                new StrikeAction(),
+                new StrikeAction(),
 
-        Game.playGameWithTwoPlayers(board, player1, player2, gameActionSequenceForPlayerOne, gameActionSequenceForPlayerTwo);
+                new MultiStrikeAction(),
+                new MultiStrikeAction(),
+
+                new RedStrikeAction(),
+                new RedStrikeAction(),
+
+                new StrikeAction(),
+                new StrikeAction(),
+
+                new DefunctCoinAction(),
+                new DefunctCoinAction(),
+
+                new EndAction(),
+                new EndAction()
+        );
+        Game game = new Game(playerList, actionList);
+        game.playGameWithTwoPlayers(board);
 
         assertEquals(player1.getScore(), 6);
         assertEquals(player2.getScore(), 3);
 
         assertEquals(board.getBlackCoinCount(), 3);
-        assertEquals(Game.winner.getName(), "testPlayer1");
+        assertEquals(game.getWinner().getName(), "testPlayer1");
     }
 
     @Test
     public void testShouldReturnDrawResult() throws InvalidBoardException {
-        List<GameAction> gameActionSequenceForPlayerOne = Arrays.asList(
-                new StrikeAction(),
-                new StrikeAction(),
-                new StrikeAction(),
-                new StrikeAction(),
-                new StrikeAction(),
-                new StrikeAction(),
-                new StrikeAction(),
-                new EndAction()
-        );
-
-        List<GameAction> gameActionSequenceForPlayerTwo = Arrays.asList(
-                new StrikeAction(),
-                new StrikeAction(),
-                new StrikeAction(),
-                new StrikeAction(),
-                new StrikeAction(),
-                new StrikeAction(),
-                new StrikeAction(),
-                new EndAction()
-        );
-
         Board board = Board.buildDefaultBoard();
         Player player1 = Player.initializePlayer("testPlayer1");
         Player player2 = Player.initializePlayer("testPlayer2");
+        List<Player> playerList = Arrays.asList(player1, player2);
+        List<GameAction> actionList = Arrays.asList(
+                new StrikeAction(),
+                new StrikeAction(),
 
-        Game.playGameWithTwoPlayers(board, player1, player2, gameActionSequenceForPlayerOne, gameActionSequenceForPlayerTwo);
+                new StrikeAction(),
+                new StrikeAction(),
+
+                new StrikeAction(),
+                new StrikeAction(),
+
+                new StrikeAction(),
+                new StrikeAction(),
+
+                new StrikeAction(),
+                new StrikeAction(),
+
+                new StrikeAction(),
+                new StrikeAction(),
+
+                new StrikeAction(),
+                new StrikeAction(),
+
+                new EndAction(),
+                new EndAction()
+        );
+        Game game = new Game(playerList, actionList);
+        game.playGameWithTwoPlayers(board);
 
         assertEquals(player1.getScore(), 5);
         assertEquals(player2.getScore(), 4);
 
         assertEquals(board.getBlackCoinCount(), 0);
-        assertNull(Game.winner);
+        assertNull(game.getWinner());
     }
 
     @Test
     public void testShouldBeWonByPlayerTwo() throws InvalidBoardException {
 
-        List<GameAction> gameActionSequenceForPlayerOne = Arrays.asList(
-                new StrikeAction(),
-                new StrikeAction(),
-                new StrikeAction(),
-                new StrikeAction(),
-                new EndAction()
-        );
-
-        List<GameAction> gameActionSequenceForPlayerTwo = Arrays.asList(
-                new StrikeAction(),
-                new MultiStrikeAction(),
-                new MultiStrikeAction(),
-                new RedStrikeAction(),
-                new EndAction()
-        );
-
         Board board = Board.buildDefaultBoard();
         Player player1 = Player.initializePlayer("testPlayer1");
         Player player2 = Player.initializePlayer("testPlayer2");
+        List<Player> playerList = Arrays.asList(player1, player2);
+        List<GameAction> actionList = Arrays.asList(
+                new StrikeAction(),
+                new StrikeAction(),
 
-        Game.playGameWithTwoPlayers(board, player1, player2, gameActionSequenceForPlayerOne, gameActionSequenceForPlayerTwo);
+                new StrikeAction(),
+                new MultiStrikeAction(),
 
-        assertEquals(Game.winner, player2);
+                new StrikeAction(),
+                new MultiStrikeAction(),
+
+                new StrikeAction(),
+                new RedStrikeAction(),
+
+                new EndAction(),
+                new EndAction()
+        );
+        Game game = new Game(playerList, actionList);
+
+        game.playGameWithTwoPlayers(board);
+
+        assertEquals(game.getWinner(), player2);
     }
 }
